@@ -10,6 +10,7 @@ GAME RULES:
 */
 
 var scores, roundScore, activePlayer, dice, gamePlaying;
+var lastDice;
 
 init();
 
@@ -20,7 +21,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 
         // 1 - Afficher un nombre aléatoire compris <> 1 et 6
 
-        var dice = Math.floor(Math.random() * 6 + 1);
+        dice = Math.floor(Math.random() * 6 + 1);
         console.log(dice);
 
         // 2 - Afficher le résultat
@@ -30,9 +31,16 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         diceDOM.src = 'dice-' + dice + '.png';
 
 
+        // Remettre le socre du joueur actif à 0 s'il tombe deux fois sur le dé 6
         // 3 - Mettre à jour le score par tour SEULEMENT si le nombre obtenu n'est pas == à 1
         // Si dice == 1, le tour passe à l'autre joueur automatiquement
-        if (dice !== 1) {
+        if (lastDice === 6 && dice === 6) {
+            scores[activePlayer] = 0;
+            roundScore = 0;
+            document.querySelector("#score-" + activePlayer).textContent = '0';
+            document.querySelector("#current-" + activePlayer).textContent = '0';
+            nextPlayer();
+        } else if (dice !== 1) {
             roundScore += dice;
             // Affichage de la nouvelle valeur sur l'interface de l'utilisateur qui joue
             document.querySelector("#current-" + activePlayer).textContent = roundScore
@@ -40,6 +48,8 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
             nextPlayer();
         }
     }
+
+    lastDice = dice;
 
 });
 
@@ -54,7 +64,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
         // Etape 3 : vérifier si le joueur a bien gagné la partie
-        if (scores[activePlayer] >= 20) {
+        if (scores[activePlayer] >= 100) {
             // S'il gagne => affichage du message 'Winner!'
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             // Faire disparaître le dé
