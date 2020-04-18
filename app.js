@@ -11,6 +11,7 @@ GAME RULES:
 
 var scores, roundScore, activePlayer, dice, gamePlaying;
 var lastDice;
+var scoreChange;
 
 init();
 
@@ -64,7 +65,16 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
         // Etape 3 : vérifier si le joueur a bien gagné la partie
-        if (scores[activePlayer] >= 100) {
+        scoreChange = document.querySelector('.final_score').value;
+        console.log(scoreChange);
+        var winningScore = '';
+        if (scoreChange) {
+            winningScore = scoreChange;
+        } else {
+            winningScore = 100;
+        }
+
+        if (scores[activePlayer] >= winningScore) {
             // S'il gagne => affichage du message 'Winner!'
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             // Faire disparaître le dé
