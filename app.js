@@ -12,6 +12,7 @@ GAME RULES:
 var scores, roundScore, activePlayer, dice, gamePlaying;
 var lastDice;
 var scoreChange;
+var secondDice;
 
 init();
 
@@ -23,13 +24,17 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         // 1 - Afficher un nombre aléatoire compris <> 1 et 6
 
         dice = Math.floor(Math.random() * 6 + 1);
-        console.log(dice);
+        secondDice = Math.floor(Math.random() * 6 + 1);
 
         // 2 - Afficher le résultat
 
         var diceDOM = document.querySelector('.dice');
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + dice + '.png';
+
+        var secondDiceDOM = document.querySelector('.second_dice');
+        secondDiceDOM.style.display = 'block';
+        secondDiceDOM.src = 'dice-' + secondDice + '.png';
 
 
         // Remettre le socre du joueur actif à 0 s'il tombe deux fois sur le dé 6
@@ -42,7 +47,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
             document.querySelector("#current-" + activePlayer).textContent = '0';
             nextPlayer();
         } else if (dice !== 1) {
-            roundScore += dice;
+            roundScore += dice + secondDice;
             // Affichage de la nouvelle valeur sur l'interface de l'utilisateur qui joue
             document.querySelector("#current-" + activePlayer).textContent = roundScore
         } else {
@@ -79,6 +84,8 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             // Faire disparaître le dé
             document.querySelector('.dice').style.display = 'none';
+            // Disparition du deuxième dé
+            document.querySelector('.second_dice').style.display = 'none';
             // Ajout de la classe 'winner' au joueur actif
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             // Suppression de la classe 'active' pour le joueur actif
@@ -103,8 +110,9 @@ function nextPlayer() {
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
 
-    // Si le dé numéro est sélectionné, l'image n'apparaît pas sur le navigateur
+    // Si le dé numéro un est sélectionné, l'image n'apparaît pas sur le navigateur
     document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.second_dice').style.display = 'none';
 }
 
 // Méthode qui permet de réinitialiser le jeu
@@ -123,6 +131,7 @@ function init() {
     gamePlaying = true;
 
     document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.second_dice').style.display = 'none';
 
     document.getElementById('score-0').textContent = '0';
     document.getElementById('score-1').textContent = '0';
